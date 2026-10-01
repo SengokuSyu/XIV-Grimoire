@@ -23,12 +23,12 @@ export default {
 
       if (interaction.replied || interaction.deferred) {
         await interaction.followUp({
-          content: "コマンド実行中にエラーが発生しました。",
+          content: "コマンド実行中にエラーが発生しました。1",
           ephemeral: true,
         });
       } else {
         await interaction.reply({
-          content: "コマンド実行中にエラーが発生しました。",
+          content: "コマンド実行中にエラーが発生しました。2",
           ephemeral: true,
         });
       }

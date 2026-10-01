@@ -3,8 +3,9 @@ import "dotenv/config";
 import { REST, Routes } from "discord.js";
 
 import pingCommand from "./commands/ping.js";
+import itemCommand from "./commands/item.js";
 
-const commands = [pingCommand.data.toJSON()];
+const commands = [pingCommand.data.toJSON(), itemCommand.data.toJSON()];
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 

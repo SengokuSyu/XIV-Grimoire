@@ -16,6 +16,18 @@ export interface SearchItemResult {
       path: string;
       path_hr1?: string;
     };
+    Description?: string;
+    LevelItem?: {
+      value: number;
+    };
+    ItemUICategory?: {
+      fields: {
+        id: number;
+        Name: string;
+      };
+    };
+    PriceMid?: number;
+    IsUntradable?: boolean;
   };
 }
 
@@ -31,7 +43,8 @@ export async function searchItem(
     params: {
       sheets: "Item",
       query: `Name~"${name}"`,
-      fields: "Name,Icon",
+      fields:
+        "Name,Description,Icon,LevelItem,ItemUICategory,PriceMid, IsUntradable",
       language: language,
       limit: 10,
     },
