@@ -33,7 +33,7 @@ export async function getItemById(itemId: number): Promise<Item> {
   const { data } = await api.get(`/sheet/Item/${itemId}`, {
     params: {
       fields:
-        "Name,Description,Icon,LevelItem,ItemUICategory,PriceLow,PriceMid,IsUntradable",
+        "Name,Description,Icon,LevelItem,ItemUICategory,PriceMid,IsUntradable",
       language: "ja",
     },
   });
