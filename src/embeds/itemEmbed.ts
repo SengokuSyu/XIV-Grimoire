@@ -4,6 +4,7 @@ import type { Item } from "../types/xivapi/Item.js";
 export function createItemEmbed(item: Item, canCraft: boolean) {
   const itemLevel = item.fields.LevelItem?.value ?? 0;
   const category = item.fields.ItemUICategory?.fields.Name ?? "-";
+  
 
   const embed = new EmbedBuilder()
     .setColor(0xc2a55f)

@@ -7,6 +7,7 @@ import {
 import { getItemById } from "../services/xivapi.js";
 import { createItemEmbed } from "../embeds/itemEmbed.js";
 import { searchRecipe } from "../services/recipe.js";
+import { getDcMarketPrice } from "../services/universalis.js";
 
 export default {
   name: Events.InteractionCreate,
@@ -20,6 +21,8 @@ export default {
       const item = await getItemById(itemId);
 
       const canCraft = await searchRecipe(item.row_id);
+      // Meteor固定にしている。後に修正。
+      const market = await getDcMarketPrice("Meteor", item.row_id);
       const embed = createItemEmbed(item, canCraft);
 
       await interaction.update({

@@ -5,6 +5,7 @@ import type { Command } from "../types/Command.js";
 import { searchItem } from "../services/xivapi.js";
 import { createItemEmbed } from "../embeds/itemEmbed.js";
 import { searchRecipe } from "../services/recipe.js";
+import { getDcMarketPrice } from "../services/universalis.js";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -45,6 +46,8 @@ const command: Command = {
     console.dir(item.fields.LevelItem, { depth: null });
 
     const canCraft = await searchRecipe(item.row_id);
+    // Meteor固定にしている。後に修正。
+    const market = await getDcMarketPrice("Meteor", item.row_id);
     const embed = createItemEmbed(item, canCraft);
 
     await interaction.reply({
