@@ -1,8 +1,8 @@
 import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 
-import type { SearchItemResult } from "../services/xivapi.js";
+import type { Item } from "../types/xivapi/Item.js";
 
-export function createItemSelectMenu(items: SearchItemResult[]) {
+export function createItemSelectMenu(items: Item[]) {
   const menu = new StringSelectMenuBuilder()
     .setCustomId("item-select")
     .setPlaceholder("アイテムを選択してください");

@@ -1,8 +1,10 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
+import { createItemSelectMenu } from "../components/itemSelectMenu.js";
 
 import type { Command } from "../types/Command.js";
 import { searchItem } from "../services/xivapi.js";
-import { EmbedBuilder } from "discord.js";
+import { createItemEmbed } from "../embeds/itemEmbed.js";
+import { searchRecipe } from "../services/recipe.js";
 
 const command: Command = {
   data: new SlashCommandBuilder()
@@ -26,62 +28,24 @@ const command: Command = {
       return;
     }
 
-    const item = items[0];
+    if (items.length > 1) {
+      const row = createItemSelectMenu(items);
 
-    if (!item) {
       await interaction.reply({
-        content: "アイテムが見つかりませんでした。",
-        ephemeral: true,
+        content: `「${name}」の検索結果です。表示するアイテムを選択してください。`,
+        components: [row],
       });
 
       return;
     }
 
+    const item = items[0]!;
+
     console.dir(items[0], { depth: null });
     console.dir(item.fields.LevelItem, { depth: null });
 
-    const itemLevel = item.fields.LevelItem?.value ?? 0;
-    const category = item.fields.ItemUICategory?.fields.Name ?? "-";
-    const price = item.fields.PriceMid
-      ? `${item.fields.PriceMid} Gil`
-      : "販売なし";
-
-    const embed = new EmbedBuilder()
-      .setColor(0xc2a55f) // FF14風のゴールド
-      .setTitle(item.fields.Name)
-      .setDescription(item.fields.Description ?? "説明はありません。")
-      .addFields(
-        {
-          name: "🆔 アイテムID",
-          value: item.row_id.toString(),
-        },
-        {
-          name: "⭐ アイテムレベル",
-          value: "Lv. " + itemLevel.toString(),
-        },
-        {
-          name: "📦 カテゴリ",
-          value: category,
-        },
-        {
-          name: "📍 NPC販売価格",
-          value: price.toString(),
-        },
-        {
-          name: "🏪 マーケット",
-          value: item.fields.IsUntradable ? "取引不可 ❌" : "取引可能 ✅",
-        },
-      )
-      .setFooter({
-        text: "XIV Grimoire",
-      })
-      .setTimestamp();
-
-    if (item.fields.Icon?.path) {
-      embed.setThumbnail(
-        `https://v2.xivapi.com/api/asset?path=${encodeURIComponent(item.fields.Icon.path)}&format=png`,
-      );
-    }
+    const canCraft = await searchRecipe(item.row_id);
+    const embed = createItemEmbed(item, canCraft);
 
     await interaction.reply({
       embeds: [embed],

@@ -1,10 +1,38 @@
-import { type Interaction, Events } from "discord.js";
+import {
+  type Interaction,
+  Events,
+  StringSelectMenuInteraction,
+} from "discord.js";
+
+import { getItemById } from "../services/xivapi.js";
+import { createItemEmbed } from "../embeds/itemEmbed.js";
+import { searchRecipe } from "../services/recipe.js";
 
 export default {
   name: Events.InteractionCreate,
 
   async execute(interaction: Interaction) {
-    console.log("interactionCreate");
+    if (interaction.isStringSelectMenu()) {
+      const itemId = Number(interaction.values[0]);
+
+      console.log(itemId);
+
+      const item = await getItemById(itemId);
+
+      const canCraft = await searchRecipe(item.row_id);
+      const embed = createItemEmbed(item, canCraft);
+
+      await interaction.update({
+        content: "",
+        embeds: [embed],
+        components: [],
+      });
+
+      console.dir(item, { depth: null });
+
+      return;
+    }
+
     if (!interaction.isChatInputCommand()) {
       return;
     }
