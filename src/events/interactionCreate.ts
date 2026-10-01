@@ -21,9 +21,9 @@ export default {
       const item = await getItemById(itemId);
 
       const canCraft = await searchRecipe(item.row_id);
-      // Meteor固定にしている。後に修正。
-      const market = await getDcMarketPrice("Meteor", item.row_id);
-      const embed = createItemEmbed(item, canCraft);
+      // Mana固定にしている。後に修正。
+      const market = await getDcMarketPrice("Mana", item.row_id);
+      const embed = createItemEmbed(item, canCraft, market);
 
       await interaction.update({
         content: "",

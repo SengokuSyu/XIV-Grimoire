@@ -1,29 +1,38 @@
 import axios from "axios";
 
-import {
-  JAPAN_DATA_CENTERS,
-  type JapanDataCenter,
-} from "../constants/dataCenters.js";
+import type { JapanDataCenter } from "../constants/dataCenters.js";
 
 const api = axios.create({
   baseURL: "https://universalis.app/api/v2",
+  timeout: 5000,
 });
 
 export interface DcMarketPrice {
   minPrice: number;
-  averagePrice: number;
+  worldName: string;
 }
 
 export async function getDcMarketPrice(
   dc: JapanDataCenter,
   itemId: number,
 ): Promise<DcMarketPrice> {
-  const worlds = JAPAN_DATA_CENTERS[dc];
+  try {
+    const { data } = await api.get(`/${dc}/${itemId}`);
 
-  const { data } = await api.get(`/${worlds.join(",")}/${itemId}`);
+    const listing = data.listings?.[0];
 
-  return {
-    minPrice: data.minPriceHQ ?? data.minPrice,
-    averagePrice: Math.round(data.averagePrice),
-  };
+    return {
+      minPrice: listing?.pricePerUnit ?? 0,
+      worldName: listing?.worldName ?? "-",
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 404) {
+      return {
+        minPrice: 0,
+        worldName: "-",
+      };
+    }
+
+    throw error;
+  }
 }
