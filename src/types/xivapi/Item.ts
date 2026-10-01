@@ -15,7 +15,6 @@ export interface Item {
 
     ItemUICategory?: ItemUICategory;
 
-    PriceLow?: number;
     PriceMid?: number;
 
     IsUntradable?: boolean;
