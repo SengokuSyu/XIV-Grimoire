@@ -8,21 +8,31 @@ import { getItemById } from "../services/xivapi.js";
 import { createItemEmbed } from "../embeds/itemEmbed.js";
 import { searchRecipe } from "../services/recipe.js";
 import { getDcMarketPrice } from "../services/universalis.js";
+import type { JapanDataCenter } from "../constants/dataCenters.js";
 
 export default {
   name: Events.InteractionCreate,
 
   async execute(interaction: Interaction) {
     if (interaction.isStringSelectMenu()) {
-      const itemId = Number(interaction.values[0]);
+      const value = interaction.values[0];
+
+if (!value) {
+  await interaction.reply({
+    content: "アイテム情報の取得に失敗しました。",
+    ephemeral: true,
+  });
+  return;
+}
+
+const [dc, itemId] = value.split(":");
 
       console.log(itemId);
 
-      const item = await getItemById(itemId);
+      const item = await getItemById(Number(itemId));
 
       const canCraft = await searchRecipe(item.row_id);
-      // Mana固定にしている。後に修正。
-      const market = await getDcMarketPrice("Mana", item.row_id);
+      const market = await getDcMarketPrice(dc as JapanDataCenter, item.row_id);
       const embed = createItemEmbed(item, canCraft, market);
 
       await interaction.update({

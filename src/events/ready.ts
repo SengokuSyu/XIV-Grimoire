@@ -7,8 +7,5 @@ export default {
 
   async execute(client: Client) {
     console.log(`${client.user?.tag} が起動しました！`);
-    const items = await searchItem("アラガン");
-
-    console.log(items);
   },
 };

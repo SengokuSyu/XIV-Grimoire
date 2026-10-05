@@ -16,6 +16,7 @@ export async function getDcMarketPrice(
   dc: JapanDataCenter,
   itemId: number,
 ): Promise<DcMarketPrice> {
+  console.log(`Fetching market price for item ${itemId} in DC: ${dc}`);
   try {
     const { data } = await api.get(`/${dc}/${itemId}`);
 
@@ -26,7 +27,9 @@ export async function getDcMarketPrice(
       worldName: listing?.worldName ?? "-",
     };
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 404) {
+    if (axios.isAxiosError(error)) {
+      console.error(`Universalis API Error: ${error.message}`);
+
       return {
         minPrice: 0,
         worldName: "-",
