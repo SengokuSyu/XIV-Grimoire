@@ -31,8 +31,6 @@ const command: Command = {
   async execute(interaction: ChatInputCommandInteraction) {
     const name = interaction.options.getString("name", true);
     const dc = interaction.options.getString("dc") ?? "Mana";
-    console.log("dc =", dc);
-
     const items = await searchItem(name);
 
     if (items.length === 0) {
@@ -56,10 +54,6 @@ const command: Command = {
     }
 
     const item = items[0]!;
-
-    console.dir(items[0], { depth: null });
-    console.dir(item.fields.LevelItem, { depth: null });
-
     const canCraft = await searchRecipe(item.row_id);
     const market = await getDcMarketPrice(dc as JapanDataCenter, item.row_id);
     const embed = createItemEmbed(item, canCraft, market);
