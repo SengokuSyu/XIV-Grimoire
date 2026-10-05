@@ -6,6 +6,7 @@ import pingCommand from "./commands/ping.js";
 import itemCommand from "./commands/item.js";
 
 const commands = [pingCommand.data.toJSON(), itemCommand.data.toJSON()];
+console.log(itemCommand.data.toJSON());
 
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
@@ -24,6 +25,18 @@ async function deployCommands() {
     );
 
     console.log("Slash Commandの登録が完了しました。");
+
+    // await rest.put(
+    //   Routes.applicationGuildCommands(
+    //     process.env.CLIENT_ID!,
+    //     process.env.GUILD_ID!,
+    //   ),
+    //   {
+    //     body: [],
+    //   },
+    // );
+
+    // console.log("コマンド削除完了");
   } catch (error) {
     console.error(error);
   }
