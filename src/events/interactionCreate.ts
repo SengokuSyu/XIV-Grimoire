@@ -17,18 +17,15 @@ export default {
     if (interaction.isStringSelectMenu()) {
       const value = interaction.values[0];
 
-if (!value) {
-  await interaction.reply({
-    content: "アイテム情報の取得に失敗しました。",
-    ephemeral: true,
-  });
-  return;
-}
+      if (!value) {
+        await interaction.reply({
+          content: "アイテム情報の取得に失敗しました。",
+          ephemeral: true,
+        });
+        return;
+      }
 
-const [dc, itemId] = value.split(":");
-
-      console.log(itemId);
-
+      const [dc, itemId] = value.split(":");
       const item = await getItemById(Number(itemId));
 
       const canCraft = await searchRecipe(item.row_id);
@@ -40,9 +37,6 @@ const [dc, itemId] = value.split(":");
         embeds: [embed],
         components: [],
       });
-
-      console.dir(item, { depth: null });
-
       return;
     }
 

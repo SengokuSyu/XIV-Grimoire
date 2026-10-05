@@ -6,8 +6,6 @@ import pingCommand from "./commands/ping.js";
 import itemCommand from "./commands/item.js";
 
 const commands = [pingCommand.data.toJSON(), itemCommand.data.toJSON()];
-console.log(itemCommand.data.toJSON());
-
 const rest = new REST({ version: "10" }).setToken(process.env.DISCORD_TOKEN!);
 
 async function deployCommands() {

@@ -16,7 +16,6 @@ export async function getDcMarketPrice(
   dc: JapanDataCenter,
   itemId: number,
 ): Promise<DcMarketPrice> {
-  console.log(`Fetching market price for item ${itemId} in DC: ${dc}`);
   try {
     const { data } = await api.get(`/${dc}/${itemId}`);
 
